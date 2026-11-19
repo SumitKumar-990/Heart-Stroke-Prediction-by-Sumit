@@ -7,10 +7,34 @@ An intelligent, interactive cardiovascular risk screening web application built 
 ## 🌟 Key Features
 
 - **Real-Time Risk Inference**: Instant binary classification (`High Risk` vs. `Low Risk`) coupled with calibrated risk probability estimates via `model.predict_proba()`.
+- **Benchmarked ML Architecture**: Based on rigorous model comparison across 5 classification algorithms in `Heart.ipynb`, selecting the top-performing model (**86.96% Accuracy**, **0.8846 F1-Score**).
 - **Human-Centric Liquid Glass Theme**: Clean, refined aesthetic featuring frosted glass containers, subtle ambient lighting, and high-contrast typography without artificial clutter.
 - **Modular Architecture**: Complete separation of concerns with styling managed in an external stylesheet (`assets/style.css`) and clean, Pythonic application code in `app.py`.
 - **Structured Clinical Input Layout**: Two-column layout separating routine baseline vitals from exercise stress test indicators.
 - **Visual Risk Meter**: Dynamic visual progress indicator displaying risk probability with color transitions.
+
+---
+
+## 🧪 Model Training, Comparison & Selection (`Heart.ipynb`)
+
+In the [Heart.ipynb](Heart.ipynb) Jupyter Notebook, I took the cardiovascular dataset, conducted exploratory data analysis (EDA), applied one-hot encoding to categorical features, and normalized the numerical features using `StandardScaler`.
+
+To ensure optimal predictive performance, I trained and evaluated **5 different machine learning classifiers** under an identical 80/20 train-test split:
+
+| Model | Accuracy | F1-Score | Status |
+| :--- | :---: | :---: | :--- |
+| **Logistic Regression** | **86.96%** | **0.8846** | 🏆 **Selected Best Model & Deployed** |
+| **K-Nearest Neighbors (KNN)** | 86.41% | 0.8815 | Evaluated |
+| **Support Vector Classifier (SVM)** | 84.78% | 0.8667 | Evaluated |
+| **Naive Bayes (GaussianNB)** | 84.78% | 0.8614 | Evaluated |
+| **Decision Tree** | 80.43% | 0.8200 | Evaluated |
+
+### Why Logistic Regression Was Chosen:
+1. **Top Performance**: Achieved the highest accuracy (**86.96%**) and highest F1-score (**0.8846**) among all benchmarked algorithms.
+2. **Probability Calibration**: Naturally outputs reliable, well-calibrated posterior probabilities (`predict_proba`), enabling the interactive risk meter in the web UI.
+3. **Robust Generalization**: Resists overfitting on clinical tabular data while remaining computationally efficient and highly interpretable.
+
+The winning model, along with the fitted scaler and feature schema, was serialized with `joblib` into `Logistic_Regression_heart.pkl`, `Scaler_heart.pkl`, and `Columns_heart.pkl` for production inference.
 
 ---
 
@@ -41,6 +65,7 @@ Heart-Stroke-Prediction-by-Sumit/
 ├── assets/
 │   └── style.css                 # Modular stylesheet (liquid glass theme & responsive layout)
 ├── app.py                        # Main Streamlit application and inference pipeline
+├── Heart.ipynb                   # Jupyter notebook (EDA, preprocessing, training & model comparison)
 ├── Columns_heart.pkl             # Serialized list of expected features (15 columns)
 ├── Logistic_Regression_heart.pkl # Pre-trained Scikit-Learn Logistic Regression model
 ├── Scaler_heart.pkl              # Fitted StandardScaler for input normalization
@@ -86,7 +111,7 @@ Ensure you have Python 3.10+ installed on your system.
 
 3. **Install required dependencies**:
    ```bash
-   pip install streamlit pandas scikit-learn joblib
+   pip install streamlit pandas scikit-learn joblib jupyter
    ```
 
 4. **Launch the web application**:
@@ -94,7 +119,10 @@ Ensure you have Python 3.10+ installed on your system.
    streamlit run app.py
    ```
 
-The app will open automatically in your browser at `http://localhost:8501`.
+   To explore the model training and comparison notebook:
+   ```bash
+   jupyter notebook Heart.ipynb
+   ```
 
 ---
 
